@@ -1,6 +1,6 @@
 import type { AnalyticsPlugin } from 'analytics'
 
-import { YMProperties, YandexMetrikaPluginOptions } from '@types'
+import { YandexMetrikaPayload, YandexMetrikaPluginOptions } from '../types'
 
 /**
 * Фабрика плагина для интеграции с Яндекс Метрикой.
@@ -14,6 +14,13 @@ export default function yandexMetrika(
 ): AnalyticsPlugin {
   const defaultOptions: Record<string, boolean> = {
     enabled: true,
+  }
+
+  /**
+   * Проверяет, что плагин включен и функция ym доступна и готова к вызову.
+   */
+  function isYmAvailable(config: YandexMetrikaPluginOptions): boolean {
+    return !!config.enabled && typeof window.ym === 'function'
   }
 
   return {
@@ -68,13 +75,7 @@ export default function yandexMetrika(
     * Отслеживает, что реальный скрипт Яндекс Метрики был успешно загружен.
     */
     loaded({ config }: { config: YandexMetrikaPluginOptions }) {
-      const { enabled } = config
-
-      if (!enabled) {
-        return
-      }
-
-      return !!window.ym && typeof window.ym === 'function'
+      return isYmAvailable(config)
     },
     /**
     * Отслеживает событие через Яндекс Метрику с использованием команды reachGoal.
@@ -82,12 +83,10 @@ export default function yandexMetrika(
     * @param event - Название события.
     * @param properties - Дополнительные параметры.
     */
-    track(event: string, properties: YMProperties = {}) {
-      if (!window.ym || typeof window.ym !== 'function') {
-        console.warn('YandexMetrikaPlugin: ym function is not available')
-        return
-      }
-      window.ym(options.counterId, 'reachGoal', event, properties)
+    track: ({ payload, config }: { payload: YandexMetrikaPayload, config: YandexMetrikaPluginOptions }) => {
+      if (!isYmAvailable(config)) return
+
+      window.ym!(config.counterId, 'reachGoal', payload.event, payload.properties)
     },
 
     /**
@@ -96,12 +95,10 @@ export default function yandexMetrika(
     * @param name - Имя страницы (не используется напрямую – используется текущий URL).
     * @param properties - Дополнительные параметры.
     */
-    page(name: string, properties: YMProperties = {}) {
-      if (!window.ym || typeof window.ym !== 'function') {
-        console.warn('YandexMetrikaPlugin: ym function is not available')
-        return
-      }
-      window.ym(options.counterId, 'hit', window.location.href, properties)
+    page: ({ payload, config }: { payload: YandexMetrikaPayload, config: YandexMetrikaPluginOptions }) => {
+      if (!isYmAvailable(config)) return
+
+      window.ym!(options.counterId, 'hit', window.location.href, payload.properties ?? {})
     },
 
     /**
@@ -110,14 +107,14 @@ export default function yandexMetrika(
     * @param userId - Идентификатор пользователя.
     * @param traits - Дополнительные атрибуты пользователя.
     */
-    identify(userId: string, traits?: YMProperties) {
-      if (!window.ym || typeof window.ym !== 'function') {
-        console.warn('YandexMetrikaPlugin: ym function is not available')
-        return
-      }
-      window.ym(options.counterId, 'setUserID', userId)
-      if (traits && Object.keys(traits).length > 0) {
-        window.ym(options.counterId, 'userParams', traits)
+    identify: ({ payload, config }: { payload: YandexMetrikaPayload, config: YandexMetrikaPluginOptions }) => {
+      if (!isYmAvailable(config)) return
+
+      const { counterId } = config
+
+      window.ym!(counterId, 'setUserID', payload.userId)
+      if (payload.traits && Object.keys(payload.traits).length > 0) {
+        window.ym!(counterId, 'userParams', payload.traits)
       }
     },
   }

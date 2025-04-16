@@ -1,4 +1,13 @@
-export type YMProperties = Record<string, string | number | boolean>
+type YMProperties = Record<string, string | number | boolean>
+
+/** Общий тип payload для методов */
+export interface YandexMetrikaPayload {
+  event?: string
+  name?: string
+  userId?: string
+  properties?: YMProperties
+  traits?: YMProperties
+}
 
 export interface YandexMetrikaPluginOptions {
   counterId: number
