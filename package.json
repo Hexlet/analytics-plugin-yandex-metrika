@@ -1,0 +1,40 @@
+{
+  "name": "analytics-plugin-yandex-metrika",
+  "version": "1.0.0",
+  "description": "Yandex Metrika plugin for DavidWells Analytics",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "peerDependencies": {
+    "analytics": "^0.8.16"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.23.0",
+    "@stylistic/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.29.1",
+    "@typescript-eslint/parser": "^8.29.1",
+    "eslint": "^9.20.1",
+    "globals": "^16.0.0",
+    "jiti": "^2.4.2",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.28.0"
+  },
+  "dependencies": {
+    "release-it": "^18.1.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hexlet/analytics-plugin-yandex-metrika.git"
+  },
+  "keywords": [
+    "analytics",
+    "Yandex Metrika"
+  ],
+  "author": "Hexlet",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Hexlet/analytics-plugin-yandex-metrika/issues"
+  },
+  "homepage": "https://github.com/Hexlet/analytics-plugin-yandex-metrika#readme"
+}
