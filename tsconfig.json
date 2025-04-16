@@ -13,7 +13,8 @@
     "paths": {
       "@/*": ["src/*"],
       "@types": ["types/index.d.ts"],
-    }
+    },
+    "skipLibCheck": true
   },
   "include": ["src", "types"],
   "exclude": ["node_modules", "dist", "eslint.config.ts"]

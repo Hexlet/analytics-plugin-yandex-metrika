@@ -1,10 +1,13 @@
 {
-  "name": "analytics-plugin-yandex-metrika",
-  "version": "1.0.0",
+  "name": "@hexlet/analytics-plugin-yandex-metrika",
+  "version": "1.0.1",
+  "type": "module",
   "description": "Yandex Metrika plugin for DavidWells Analytics",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc --build"
+    "build": "tsc --build",
+    "lint": "tsc --noEmit"
   },
   "peerDependencies": {
     "analytics": "^0.8.16"
