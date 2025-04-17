@@ -31,6 +31,9 @@
     "type": "git",
     "url": "git+https://github.com/Hexlet/analytics-plugin-yandex-metrika.git"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "analytics",
     "Yandex Metrika"
