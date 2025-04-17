@@ -3,3 +3,6 @@ build:
 
 lint:
 	npx eslint . && npm run lint
+
+release:
+	npm run release
