@@ -98,7 +98,13 @@ export default function yandexMetrika(
     page: ({ payload, config }: { payload: YandexMetrikaPayload, config: YandexMetrikaPluginOptions }) => {
       if (!isYmAvailable(config)) return
 
-      window.ym!(options.counterId, 'hit', window.location.href, payload.properties ?? {})
+      // Если payload.properties не задан — ставим пустой объект
+      const { properties = {} } = payload
+
+      // Если внутри нет url — используем window.location.href
+      const url = properties.url ?? window.location.href
+
+      window.ym!(options.counterId, 'hit', url, properties)
     },
 
     /**
