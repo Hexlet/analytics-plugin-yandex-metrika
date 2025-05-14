@@ -2,7 +2,7 @@ type YMProperties = Record<string, string | number | boolean>
 
 /** Общий тип payload для методов */
 export interface YandexMetrikaPayload {
-  event?: string
+  event: string
   name?: string
   userId?: string
   properties?: YMProperties
@@ -12,6 +12,7 @@ export interface YandexMetrikaPayload {
 export interface YandexMetrikaPluginOptions {
   counterId: number
   enabled?: boolean
+  mapEvents?: Record<string, string> // analyticsEvent → yandexGoalId
 }
 
 interface YandexMetrikaFunction {

@@ -31,9 +31,7 @@ export default function yandexMetrika(
     * Метод инициализации плагина.
     */
     initialize({ config }: { config: YandexMetrikaPluginOptions }) {
-      const { counterId } = config
-
-      if (!counterId) {
+      if (!config.counterId) {
         throw new Error('YandexMetrikaPlugin: counterId is required.')
       }
 
@@ -63,7 +61,7 @@ export default function yandexMetrika(
         (window.ym!.a ??= []).push(args)
       }
       // Инициализируем Яндекс Метрику
-      window.ym(counterId, 'init', {
+      window.ym(config.counterId, 'init', {
         clickmap: true,
         trackLinks: true,
         accurateTrackBounce: true,
@@ -86,7 +84,14 @@ export default function yandexMetrika(
     track: ({ payload, config }: { payload: YandexMetrikaPayload, config: YandexMetrikaPluginOptions }) => {
       if (!isYmAvailable(config)) return
 
-      window.ym!(config.counterId, 'reachGoal', payload.event, payload.properties)
+      const eventMap = config.mapEvents || {}
+      const mappedEvent = eventMap[payload.event] || payload.event
+
+      if (!eventMap[payload.event]) {
+        console.warn(`[YandexMetrika] No mapped goal for event "${payload.event}", sending as-is`)
+      }
+
+      window.ym!(config.counterId, 'reachGoal', mappedEvent, payload.properties)
     },
 
     /**
@@ -104,7 +109,7 @@ export default function yandexMetrika(
       // Если внутри нет url — используем window.location.href
       const url = properties.url ?? window.location.href
 
-      window.ym!(options.counterId, 'hit', url, properties)
+      window.ym!(config.counterId, 'hit', url, properties)
     },
 
     /**
@@ -116,11 +121,9 @@ export default function yandexMetrika(
     identify: ({ payload, config }: { payload: YandexMetrikaPayload, config: YandexMetrikaPluginOptions }) => {
       if (!isYmAvailable(config)) return
 
-      const { counterId } = config
-
-      window.ym!(counterId, 'setUserID', payload.userId)
+      window.ym!(config.counterId, 'setUserID', payload.userId)
       if (payload.traits && Object.keys(payload.traits).length > 0) {
-        window.ym!(counterId, 'userParams', payload.traits)
+        window.ym!(config.counterId, 'userParams', payload.traits)
       }
     },
   }
