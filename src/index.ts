@@ -1,6 +1,5 @@
 import type { AnalyticsPlugin } from 'analytics'
-
-import { YandexMetrikaPayload, YandexMetrikaPluginOptions } from '../types'
+import { YandexMetrikaPayload, YandexMetrikaPluginOptions } from './types'
 
 /**
 * Фабрика плагина для интеграции с Яндекс Метрикой.

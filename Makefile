@@ -1,8 +1,11 @@
 build:
 	rm -rf dist && npm run build
 
+check-types:
+	npx tsc --noEmit
+
 lint:
-	npx eslint . && npm run lint
+	npx oxlint .
 
 release:
 	npm run release

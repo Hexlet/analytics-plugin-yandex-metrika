@@ -11,6 +11,5 @@
     "noUnusedParameters": false,
     "skipLibCheck": true
   },
-  "include": ["src", "types"],
-  "exclude": ["node_modules", "dist", "eslint.config.ts"]
+  "include": ["src"],
 }
