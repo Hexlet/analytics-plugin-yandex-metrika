@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.26.0",
+    "@release-it/conventional-changelog": "^10.0.1",
     "@stylistic/eslint-plugin": "^4.2.0",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
@@ -27,6 +28,17 @@
   },
   "dependencies": {
     "release-it": "^19.0.2"
+  },
+  "release-it": {
+    "hooks": {
+      "before:release": "npm run build"
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": "conventionalcommits",
+        "infile": "CHANGELOG.md"
+      }
+    }
   },
   "repository": {
     "type": "git",
