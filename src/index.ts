@@ -1,5 +1,5 @@
 import type { AnalyticsPlugin } from 'analytics'
-import { YandexMetrikaPayload, YandexMetrikaPluginOptions } from './types'
+import { YandexMetrikaPayload, YandexMetricaPayloadForIdentify, YandexMetrikaPluginOptions, FirstPartyParams } from './types'
 
 /**
 * Фабрика плагина для интеграции с Яндекс Метрикой.
@@ -86,7 +86,7 @@ export default function yandexMetrika(
       const eventMap = config.mapEvents || {}
       const mappedEvent = eventMap[payload.event] || payload.event
 
-      if (!eventMap[payload.event]) {
+      if (config.dev && !eventMap[payload.event]) {
         console.warn(`[YandexMetrika] No mapped goal for event "${payload.event}", sending as-is`)
       }
 
@@ -117,12 +117,32 @@ export default function yandexMetrika(
     * @param userId - Идентификатор пользователя.
     * @param traits - Дополнительные атрибуты пользователя.
     */
-    identify: ({ payload, config }: { payload: YandexMetrikaPayload, config: YandexMetrikaPluginOptions }) => {
+    identify: ({ payload, config }: { payload: YandexMetricaPayloadForIdentify, config: YandexMetrikaPluginOptions }) => {
       if (!isYmAvailable(config)) return
 
+      const traits = payload.traits
+
       window.ym!(config.counterId, 'setUserID', payload.userId)
-      if (payload.traits && Object.keys(payload.traits).length > 0) {
-        window.ym!(config.counterId, 'userParams', payload.traits)
+      if (traits && Object.keys(traits).length > 0) {
+        window.ym!(config.counterId, 'userParams', { ...traits, UserID: payload.userId })
+
+        const firstPartyParams: FirstPartyParams = {}
+        if (traits.email) {
+          firstPartyParams.email = traits.email
+        }
+        if (traits.phone_number) {
+          firstPartyParams.phone_number = traits.phone_number
+        }
+        if (traits.first_name) {
+          firstPartyParams.first_name = traits.first_name
+        }
+        if (traits.last_name) {
+          firstPartyParams.last_name = traits.last_name
+        }
+        if (traits.yandex_cid) {
+          firstPartyParams.yandex_cid = traits.yandex_cid
+        }
+        window.ym!(config.counterId, 'firstPartyParams', firstPartyParams);
       }
     },
   }
