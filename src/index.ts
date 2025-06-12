@@ -8,18 +8,17 @@ import { YandexMetrikaPayload, YandexMetricaPayloadForIdentify, YandexMetrikaPlu
 * @param options - Опции плагина, включая counterId и флаг enabled.
 * @returns Объект, реализующий интерфейс AnalyticsPlugin.
 */
-export default function yandexMetrika(
-  options: YandexMetrikaPluginOptions,
-): AnalyticsPlugin {
+export default function yandexMetrika(options: YandexMetrikaPluginOptions): AnalyticsPlugin {
   const defaultOptions: Record<string, boolean> = {
     enabled: true,
   }
 
-  /**
-   * Проверяет, что плагин включен и функция ym доступна и готова к вызову.
-   */
-  function isYmAvailable(config: YandexMetrikaPluginOptions): boolean {
-    return !!config.enabled && typeof window.ym === 'function'
+  const loaded = () => {
+    return typeof window.ym === 'function'
+  }
+
+  const isYmAvailable = (config: YandexMetrikaPluginOptions): boolean => {
+    return !!config.enabled && loaded()
   }
 
   return {
@@ -30,6 +29,9 @@ export default function yandexMetrika(
     * Метод инициализации плагина.
     */
     initialize({ config }: { config: YandexMetrikaPluginOptions }) {
+
+      if (!config.enabled || loaded()) return
+
       if (!config.counterId) {
         throw new Error('YandexMetrikaPlugin: counterId is required.')
       }
@@ -68,11 +70,8 @@ export default function yandexMetrika(
       })
     },
 
-    /**
-    * Отслеживает, что реальный скрипт Яндекс Метрики был успешно загружен.
-    */
     loaded({ config }: { config: YandexMetrikaPluginOptions }) {
-      return isYmAvailable(config)
+      return loaded()
     },
     /**
     * Отслеживает событие через Яндекс Метрику с использованием команды reachGoal.
