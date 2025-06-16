@@ -1,6 +1,6 @@
 {
   "name": "@hexlet/analytics-plugin-yandex-metrika",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "type": "module",
   "description": "Yandex Metrika plugin for DavidWells Analytics",
   "main": "dist/index.js",
