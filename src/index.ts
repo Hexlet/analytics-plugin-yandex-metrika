@@ -14,6 +14,11 @@ export default function yandexMetrika(options: YandexMetrikaPluginOptions): Anal
   }
 
   const loaded = () => {
+    // Защита от SSR — если window или document нет, считаем, что не загружено
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return false;
+    }
+
     return typeof window.ym === 'function'
   }
 
@@ -70,7 +75,7 @@ export default function yandexMetrika(options: YandexMetrikaPluginOptions): Anal
       })
     },
 
-    loaded({ config }: { config: YandexMetrikaPluginOptions }) {
+    loaded() {
       return loaded()
     },
     /**
