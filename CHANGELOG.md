@@ -1,5 +1,7 @@
 # Changelog
 
+## [1.0.10](///compare/1.0.9...1.0.10) (2025-11-18)
+
 ## [1.0.9](https://github.com/Hexlet/analytics-plugin-yandex-metrika/compare/1.0.8...1.0.9) (2025-06-16)
 
 ## [1.0.8](https://github.com/Hexlet/analytics-plugin-yandex-metrika/compare/1.0.7...1.0.8) (2025-06-12)
