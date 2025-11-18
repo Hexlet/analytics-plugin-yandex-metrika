@@ -1,0 +1,9 @@
+{
+  "npm": {
+    "publish": true,
+    "registry": "https://registry.npmjs.org/"
+  },
+  "hooks": {
+    "after:npm:release": "npm publish --registry=https://npm.pkg.github.com"
+  }
+}
